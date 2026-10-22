@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10-ын Хүрд Таниулах Интерактив Хичээл</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    @keyframes bounce-subtle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-bounce-subtle {
+      animation: bounce-subtle 2s infinite ease-in-out;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.6; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+    .animate-glow {
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/30 text-white text-2xl font-bold">
+          <i class="fa-solid fa-calculator"></i>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-cyan-400 via-sky-300 to-amber-300 bg-clip-text text-transparent">
+            10-ын Хүрд Таниулах Хичээл
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-400">2-р анги • Математик • Үржүүлэх үйлдэл</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800 overflow-x-auto max-w-full">
+        <button onclick="switchTab('concept')" id="tab-concept" class="nav-btn active px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 whitespace-nowrap bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-md shadow-cyan-500/20">
+          <i class="fa-solid fa-shapes"></i> Ойлгомж ба Загвар
+        </button>
+        <button onclick="switchTab('table')" id="tab-table" class="nav-btn px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/50">
+          <i class="fa-solid fa-table-cells"></i> 10-ын хүрд
+        </button>
+        <button onclick="switchTab('skip')" id="tab-skip" class="nav-btn px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/50">
+          <i class="fa-solid fa-shoe-prints"></i> 10, 10-аар тоолох
+        </button>
+        <button onclick="switchTab('games')" id="tab-games" class="nav-btn px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all duration-200 flex items-center gap-2 whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/50">
+          <i class="fa-solid fa-gamepad"></i> Дасгал тоглоом
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 flex flex-col justify-center">
+
+    <!-- SECTION 1: CONCEPT & MODEL (Ойлгомж ба Загвар) -->
+    <section id="section-concept" class="tab-content block space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        
+        <!-- Header & Controls -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 mb-2">
+              ҮЗҮҮЛЭН МАТЕРИАЛ
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Үржүүлэх нь ижил нэмэгдэхүүний нийлбэр юм</h2>
+          </div>
+
+          <div class="flex items-center gap-3 bg-slate-950 p-2 rounded-2xl border border-slate-800 self-start md:self-auto">
+            <span class="text-sm font-semibold text-slate-400 px-2">Бүлгийн тоо:</span>
+            <button onclick="changeGroups(-1)" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-cyan-600 text-white font-bold transition flex items-center justify-center text-lg active:scale-95 border border-slate-700">
+              <i class="fa-solid fa-minus"></i>
+            </button>
+            <span id="group-count-display" class="text-2xl font-black text-cyan-400 w-8 text-center">3</span>
+            <button onclick="changeGroups(1)" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-cyan-600 text-white font-bold transition flex items-center justify-center text-lg active:scale-95 border border-slate-700">
+              <i class="fa-solid fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Visualizer Canvas / Container -->
+        <div class="bg-slate-950 border border-slate-800/80 rounded-2xl p-6 min-h-[260px] flex flex-col items-center justify-center relative my-6">
+          <p class="text-slate-400 text-sm mb-6 text-center">
+            <span id="visual-desc" class="font-semibold text-sky-300">3</span> хайрцаг тус бүрд <span class="font-bold text-amber-400">10</span> ширхэг одон байна:
+          </p>
+
+          <!-- Group Boxes -->
+          <div id="plates-container" class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 max-w-full">
+            <!-- Dynamic boxes injected here -->
+          </div>
+        </div>
+
+        <!-- Formula Displays -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Addition View -->
+          <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-5 text-center">
+            <span class="text-xs font-bold tracking-wider text-slate-400 uppercase block mb-2">НЭМЭХ ҮЙЛДЭЛ (ДАВТАН НЭМЭХ)</span>
+            <div id="addition-formula" class="text-xl sm:text-2xl font-black text-white tracking-wide">
+              10 + 10 + 10 = 30
+            </div>
+          </div>
+
+          <!-- Multiplication View -->
+          <div class="bg-gradient-to-br from-slate-950 to-cyan-950/30 border border-cyan-500/30 rounded-2xl p-5 text-center relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 w-20 h-20 bg-cyan-500/10 rounded-full blur-xl"></div>
+            <span class="text-xs font-bold tracking-wider text-cyan-400 uppercase block mb-2">ҮРЖҮҮЛЭХ ҮЙЛДЭЛ</span>
+            <div id="multiplication-formula" class="text-2xl sm:text-3xl font-black text-amber-400 tracking-wide mb-1">
+              3 × 10 = 30
+            </div>
+            <p id="multiplication-sub" class="text-xs text-slate-400">
+              3 ширхэг 10 буюу 3 удаа 10-ыг нэмсэн
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2: 10 TIMES TABLE VIEW (10-ын Хүрд) -->
+    <section id="section-table" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+        <div class="text-center max-w-2xl mx-auto mb-8">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 mb-2">
+            ХҮРДНИЙ НУУЦ
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">10-ын хүрдтэй танилцаарай</h2>
+          <p class="text-slate-400 text-sm">
+            10-ын хүрдний нууцыг ажиглаарай! Дурын тоог 10-аар үржүүлэхэд тухайн тооны ард дандаа нэг <span class="text-cyan-400 font-bold">0</span> залгагддаг.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="table-grid">
+          <!-- Dynamic cards for 1x10 to 10x10 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: SKIP COUNTING (10, 10-аар тоолох) -->
+    <section id="section-skip" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+        <div class="text-center max-w-2xl mx-auto mb-6">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
+            АЛХАЖ ТОАЛОХ
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">10, 10-аар нэмэгдүүлэн тоолцгооё</h2>
+          <p class="text-slate-400 text-sm">Тоон дээр дарж 10-аар ахиулан тоолох багцыг хараарай!</p>
+        </div>
+
+        <!-- Interactive Skip Counting Line -->
+        <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 overflow-x-auto custom-scrollbar">
+          <div class="flex items-center justify-between min-w-[700px] py-4 px-2 relative">
+            <!-- Line background -->
+            <div class="absolute top-1/2 left-6 right-6 h-1 bg-slate-800 -translate-y-1/2 z-0"></div>
+
+            <!-- Skip buttons -->
+            <div class="w-full flex justify-between relative z-10" id="skip-buttons-container">
+              <!-- JS Injected -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Selected Number Detail Card -->
+        <div id="skip-detail-card" class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 text-center min-h-[160px] flex flex-col items-center justify-center">
+          <!-- JS dynamic content -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: GAMES & QUIZZES (Дасгал Тоглоом) -->
+    <section id="section-games" class="tab-content hidden space-y-6">
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+        
+        <!-- Game Selector Header -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-2">
+              ИНТЕРАКТИВ ДАСГАЛ
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Мэдлэгээ сорих тоглоомууд</h2>
+          </div>
+
+          <!-- Mini Game Switcher -->
+          <div class="flex bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+            <button onclick="switchMiniGame('quiz')" id="subtab-quiz" class="subgame-btn px-4 py-2 rounded-lg font-bold text-xs sm:text-sm bg-purple-600 text-white transition">
+              <i class="fa-solid fa-circle-question mr-1.5"></i> Сонгох Асуулт
+            </button>
+            <button onclick="switchMiniGame('drag')" id="subtab-drag" class="subgame-btn px-4 py-2 rounded-lg font-bold text-xs sm:text-sm text-slate-400 hover:text-white transition">
+              <i class="fa-solid fa-puzzle-piece mr-1.5"></i> Төөрсөн тоо
+            </button>
+          </div>
+        </div>
+
+        <!-- GAME 1: QUIZ GAME -->
+        <div id="game-quiz" class="min-h-[350px] flex flex-col justify-between pt-4">
+          <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 mb-6">
+            <div class="text-sm font-bold text-slate-400">
+              Дасгал <span id="quiz-step" class="text-purple-400 font-extrabold">1</span> / 10
+            </div>
+            <div class="flex items-center gap-2">
+              <i class="fa-solid fa-trophy text-amber-400 text-lg"></i>
+              <span class="text-sm font-extrabold text-white">Оноо: <span id="quiz-score" class="text-amber-400">0</span></span>
+            </div>
+          </div>
+
+          <!-- Question Box -->
+          <div class="bg-slate-950 border border-slate-800 rounded-2xl p-8 text-center my-auto shadow-inner">
+            <div id="quiz-question-visual" class="text-4xl sm:text-5xl mb-4 font-black text-cyan-400 animate-bounce-subtle">
+              10 × 4 = ?
+            </div>
+            <p id="quiz-question-sub" class="text-slate-400 text-sm">
+              4 уутанд тус бүр 10 чихэр байвал нийт хэдэн чихэр болох вэ?
+            </p>
+          </div>
+
+          <!-- Answer Options -->
+          <div id="quiz-options" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+            <!-- Options dynamically generated -->
+          </div>
+        </div>
+
+        <!-- GAME 2: MISSING NUMBERS (DRAG/FILL) -->
+        <div id="game-drag" class="hidden min-h-[350px] flex flex-col justify-between pt-4">
+          <div class="text-center mb-6">
+            <h3 class="text-lg font-extrabold text-white mb-1">Цувааны дутуу тоог нөхөөрэй!</h3>
+            <p class="text-xs text-slate-400">Доорх нүдэнд зөв хариуг бичиж нөхөөрэй.</p>
+          </div>
+
+          <!-- Missing sequence container -->
+          <div id="sequence-container" class="bg-slate-950 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-wrap items-center justify-center gap-3 min-h-[160px] my-auto">
+            <!-- Sequence items dynamically inserted -->
+          </div>
+
+          <!-- Action status / result -->
+          <div id="sequence-feedback" class="text-center font-bold text-sm h-6 my-2 text-emerald-400"></div>
+
+          <div class="text-center mt-4">
+            <button onclick="generateSequenceGame()" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm transition shadow-lg shadow-purple-600/30 active:scale-95">
+              <i class="fa-solid fa-arrows-rotate mr-2"></i> Шинэ цуваа авах
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-4 text-center text-xs text-slate-500 mt-auto">
+    <p>2 дугаар ангийн сурагчдад зориулсан "10-ын хүрд таниулах" интерактив сургалтын хэрэглэгдэхүүн</p>
+  </footer>
+
+  <script>
+    // GLOBAL STATE
+    let currentTab = 'concept';
+    let conceptGroups = 3;
+
+    // Quiz State
+    let quizQuestions = [];
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    // INITIALIZATION
+    window.onload = function() {
+      renderConcept();
+      renderTable();
+      renderSkipCounting();
+      initQuiz();
+      generateSequenceGame();
+    };
+
+    // TAB SWITCHING LOGIC
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-gradient-to-r', 'from-cyan-500', 'to-blue-500', 'text-white', 'shadow-md', 'shadow-cyan-500/20');
+        btn.classList.add('text-slate-400');
+      });
+
+      const activeSection = document.getElementById(`section-${tabId}`);
+      if (activeSection) activeSection.classList.remove('hidden');
+
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-gradient-to-r', 'from-cyan-500', 'to-blue-500', 'text-white', 'shadow-md', 'shadow-cyan-500/20');
+        activeBtn.classList.remove('text-slate-400');
+      }
+    }
+
+    // SECTION 1: CONCEPT LOGIC
+    function changeGroups(delta) {
+      conceptGroups += delta;
+      if (conceptGroups < 1) conceptGroups = 1;
+      if (conceptGroups > 10) conceptGroups = 10;
+      renderConcept();
+    }
+
+    function renderConcept() {
+      document.getElementById('group-count-display').innerText = conceptGroups;
+      document.getElementById('visual-desc').innerText = conceptGroups;
+
+      const platesContainer = document.getElementById('plates-container');
+      platesContainer.innerHTML = '';
+
+      for (let i = 0; i < conceptGroups; i++) {
+        const box = document.createElement('div');
+        box.className = 'bg-slate-900 border-2 border-slate-700/80 rounded-2xl p-3 grid grid-cols-5 gap-1.5 shadow-lg transition-transform duration-300 hover:scale-105';
+        
+        // Add 10 items inside
+        for (let j = 0; j < 10; j++) {
+          const item = document.createElement('span');
+          item.className = 'text-lg sm:text-xl filter drop-shadow-md select-none';
+          item.innerText = '⭐';
+          box.appendChild(item);
+        }
+        platesContainer.appendChild(box);
+      }
+
+      const total = conceptGroups * 10;
+
+      // Addition array
+      const additionArr = Array(conceptGroups).fill(10);
+      document.getElementById('addition-formula').innerText = additionArr.join(' + ') + ' = ' + total;
+
+      // Multiplication formula
+      document.getElementById('multiplication-formula').innerText = `${conceptGroups} × 10 = ${total}`;
+      document.getElementById('multiplication-sub').innerText = `${conceptGroups} ширхэг 10 буюу ${conceptGroups} удаа 10-ыг нэмсэн`;
+    }
+
+    // SECTION 2: TABLE LOGIC
+    function renderTable() {
+      const grid = document.getElementById('table-grid');
+      grid.innerHTML = '';
+
+      for (let i = 1; i <= 10; i++) {
+        const ans = i * 10;
+
+        const card = document.createElement('div');
+        card.className = `bg-slate-950 border border-cyan-500/30 rounded-2xl p-4 text-center hover:bg-slate-800/40 transition duration-300 group cursor-default relative overflow-hidden`;
+
+        card.innerHTML = `
+          <div class="text-xs font-bold text-slate-500 mb-1">10 × ${i}</div>
+          <div class="text-xl sm:text-2xl font-black text-white group-hover:scale-110 transition duration-300">
+            10 × ${i} = <span class="text-cyan-400">${ans}</span>
+          </div>
+          <div class="mt-2 text-[10px] uppercase tracking-wider font-bold text-cyan-400/70">
+            Төгсгөл: '0'
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    }
+
+    // SECTION 3: SKIP COUNTING LOGIC
+    let currentSkipNum = 10;
+
+    function renderSkipCounting() {
+      const container = document.getElementById('skip-buttons-container');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= 10; i++) {
+        const val = i * 10;
+        const btn = document.createElement('button');
+        btn.onclick = () => selectSkipNumber(val, i);
+        btn.className = `w-12 h-12 rounded-2xl font-black text-sm transition-all duration-200 flex flex-col items-center justify-center border ${
+          val === currentSkipNum 
+            ? 'bg-gradient-to-tr from-cyan-500 to-blue-500 border-cyan-300 text-white shadow-lg shadow-cyan-500/40 scale-110 z-20' 
+            : 'bg-slate-900 border-slate-700 text-slate-300 hover:border-cyan-500/50 hover:text-white z-10'
+        }`;
+        btn.innerHTML = `
+          <span>${val}</span>
+        `;
+        container.appendChild(btn);
+      }
+
+      selectSkipNumber(currentSkipNum, currentSkipNum / 10);
+    }
+
+    function selectSkipNumber(val, count) {
+      currentSkipNum = val;
+      renderSkipCountingHighlighting();
+
+      const detail = document.getElementById('skip-detail-card');
+      let handsHtml = '';
+      for (let i = 0; i < count; i++) {
+        handsHtml += '<span class="text-3xl sm:text-4xl animate-bounce-subtle">🙌</span>';
+      }
+
+      detail.innerHTML = `
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-3">
+          ${handsHtml}
+        </div>
+        <div class="text-xl sm:text-2xl font-black text-white">
+          <span class="text-cyan-400">${count}</span> удаа 10 = <span class="text-amber-400">${val}</span>
+        </div>
+        <div class="text-xs text-slate-400 mt-1">
+          Үржүүлэх илэрхийлэл: <span class="text-white font-bold">${count} × 10 = ${val}</span>
+        </div>
+      `;
+    }
+
+    function renderSkipCountingHighlighting() {
+      const btns = document.querySelectorAll('#skip-buttons-container button');
+      btns.forEach((btn, idx) => {
+        const val = (idx + 1) * 10;
+        if (val === currentSkipNum) {
+          btn.className = 'w-12 h-12 rounded-2xl font-black text-sm transition-all duration-200 flex flex-col items-center justify-center border bg-gradient-to-tr from-cyan-500 to-blue-500 border-cyan-300 text-white shadow-lg shadow-cyan-500/40 scale-110 z-20';
+        } else {
+          btn.className = 'w-12 h-12 rounded-2xl font-black text-sm transition-all duration-200 flex flex-col items-center justify-center border bg-slate-900 border-slate-700 text-slate-300 hover:border-cyan-500/50 hover:text-white z-10';
+        }
+      });
+    }
+
+    // SECTION 4: GAMES LOGIC
+    function switchMiniGame(gameType) {
+      document.getElementById('game-quiz').classList.add('hidden');
+      document.getElementById('game-drag').classList.add('hidden');
+
+      document.getElementById('subtab-quiz').classList.remove('bg-purple-600', 'text-white');
+      document.getElementById('subtab-quiz').classList.add('text-slate-400');
+      document.getElementById('subtab-drag').classList.remove('bg-purple-600', 'text-white');
+      document.getElementById('subtab-drag').classList.add('text-slate-400');
+
+      if (gameType === 'quiz') {
+        document.getElementById('game-quiz').classList.remove('hidden');
+        document.getElementById('subtab-quiz').classList.add('bg-purple-600', 'text-white');
+        document.getElementById('subtab-quiz').classList.remove('text-slate-400');
+      } else {
+        document.getElementById('game-drag').classList.remove('hidden');
+        document.getElementById('subtab-drag').classList.add('bg-purple-600', 'text-white');
+        document.getElementById('subtab-drag').classList.remove('text-slate-400');
+      }
+    }
+
+    // QUIZ IMPLEMENTATION
+    function initQuiz() {
+      quizQuestions = [];
+      for (let i = 1; i <= 10; i++) {
+        const correct = i * 10;
+        let opts = new Set([correct]);
+        while (opts.size < 4) {
+          let randomOffset = (Math.floor(Math.random() * 5) - 2) * 10;
+          let wrong = correct + randomOffset;
+          if (wrong > 0 && wrong <= 120 && wrong !== correct) {
+            opts.add(wrong);
+          } else {
+            opts.add(Math.floor(Math.random() * 10 + 1) * 10);
+          }
+        }
+
+        quizQuestions.push({
+          q: `10 × ${i} = ?`,
+          sub: `${i} удаа 10-ыг нэмвэл хэд болох вэ?`,
+          correct: correct,
+          options: Array.from(opts).sort(() => Math.random() - 0.5)
+        });
+      }
+
+      // Shuffle questions
+      quizQuestions.sort(() => Math.random() - 0.5);
+      currentQuizIndex = 0;
+      quizScore = 0;
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      document.getElementById('quiz-step').innerText = currentQuizIndex + 1;
+      document.getElementById('quiz-score').innerText = quizScore;
+
+      if (currentQuizIndex >= quizQuestions.length) {
+        // Quiz completed
+        document.getElementById('quiz-question-visual').innerHTML = `🎉 Баяр хүргэе!`;
+        document.getElementById('quiz-question-sub').innerText = `Та 10 асуултаас ${quizScore} оноо авлаа!`;
+        
+        document.getElementById('quiz-options').innerHTML = `
+          <button onclick="initQuiz()" class="col-span-2 sm:col-span-4 py-3 bg-purple-600 hover:bg-purple-500 text-white font-extrabold rounded-2xl transition shadow-lg shadow-purple-600/30">
+            Дахин тоглох
+          </button>
+        `;
+        return;
+      }
+
+      const currentQ = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-question-visual').innerText = currentQ.q;
+      document.getElementById('quiz-question-sub').innerText = currentQ.sub;
+
+      const optsContainer = document.getElementById('quiz-options');
+      optsContainer.innerHTML = '';
+
+      currentQ.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.onclick = () => checkQuizAnswer(opt, currentQ.correct);
+        btn.className = 'py-4 bg-slate-950 border border-slate-800 hover:border-purple-500/50 hover:bg-slate-800/50 rounded-2xl font-black text-xl text-white transition duration-200 active:scale-95 shadow-md';
+        btn.innerText = opt;
+        optsContainer.appendChild(btn);
+      });
+    }
+
+    function checkQuizAnswer(selected, correct) {
+      if (selected === correct) {
+        quizScore += 10;
+      }
+      currentQuizIndex++;
+      renderQuizQuestion();
+    }
+
+    // SEQUENCE GAME IMPLEMENTATION
+    let currentSequence = [];
+    let missingIndices = [];
+
+    function generateSequenceGame() {
+      const container = document.getElementById('sequence-container');
+      const feedback = document.getElementById('sequence-feedback');
+      feedback.innerText = '';
+      container.innerHTML = '';
+
+      // Pick a starting multiplier (e.g. 1 to 5)
+      const startMult = Math.floor(Math.random() * 5) + 1;
+      currentSequence = [];
+      for (let i = 0; i < 5; i++) {
+        currentSequence.push((startMult + i) * 10);
+      }
+
+      // Pick 2 random missing indices
+      missingIndices = [];
+      while (missingIndices.length < 2) {
+        let idx = Math.floor(Math.random() * 5);
+        if (!missingIndices.includes(idx)) missingIndices.push(idx);
+      }
+
+      currentSequence.forEach((val, idx) => {
+        if (missingIndices.includes(idx)) {
+          // Input placeholder
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.dataset.correct = val;
+          input.className = 'seq-input w-16 h-16 sm:w-20 sm:h-20 bg-slate-900 border-2 border-dashed border-purple-500 rounded-2xl text-center font-black text-xl sm:text-2xl text-amber-400 focus:outline-none focus:border-cyan-500 transition shadow-inner';
+          input.placeholder = '?';
+          input.oninput = checkSequenceCompletion;
+          container.appendChild(input);
+        } else {
+          // Regular number display
+          const box = document.createElement('div');
+          box.className = 'w-16 h-16 sm:w-20 sm:h-20 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl text-white shadow-md';
+          box.innerText = val;
+          container.appendChild(box);
+        }
+
+        if (idx < currentSequence.length - 1) {
+          const arrow = document.createElement('span');
+          arrow.className = 'text-slate-600 text-lg sm:text-xl font-bold';
+          arrow.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+          container.appendChild(arrow);
+        }
+      });
+    }
+
+    function checkSequenceCompletion() {
+      const inputs = document.querySelectorAll('.seq-input');
+      let allCorrect = true;
+      let filled = true;
+
+      inputs.forEach(input => {
+        const val = parseInt(input.value);
+        const correct = parseInt(input.dataset.correct);
+        if (isNaN(val)) {
+          filled = false;
+        } else if (val !== correct) {
+          allCorrect = false;
+        }
+      });
+
+      const feedback = document.getElementById('sequence-feedback');
+      if (filled && allCorrect) {
+        feedback.innerText = '✨ Баяр хүргэе! Цааш дахин шинэ цуваа аваарай.';
+        feedback.className = 'text-center font-bold text-sm h-6 my-2 text-emerald-400';
+      } else if (filled && !allCorrect) {
+        feedback.innerText = '❌ Буруу байна, сайн бодоорой!';
+        feedback.className = 'text-center font-bold text-sm h-6 my-2 text-rose-400';
+      } else {
+        feedback.innerText = '';
+      }
+    }
+  </script>
+</body>
+</html>
